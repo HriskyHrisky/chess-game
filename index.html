@@ -13,7 +13,7 @@
 --board-size: min(80vw, 80vh, 500px);
 --square-size: calc(var(--board-size) / 8);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0;}
 body {
 font-family: sans-serif;
 background: #312e2b;
@@ -78,9 +78,9 @@ padding: 3px 6px;
 border-radius: 3px;
 font-size: 0.9rem;
 }
-.move-entry .move-num { color: #888; min-width: 22px; }
-.move-entry .move-text { color: #eee; flex: 1; }
-.move-entry .move-time { color: #aaa; font-size: 0.8rem; }
+.move-entry .move-num { color: #888; min-width: 22px;}
+.move-entry .move-text { color: #eee; flex: 1;}
+.move-entry .move-time { color: #aaa; font-size: 0.8rem;}
 .board-timer {
 position: absolute;
 top: 0;
@@ -94,7 +94,7 @@ border-radius: 3px;
 pointer-events: none;
 z-index: 10;
 }
-.controls { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.controls { display: flex; flex-wrap: wrap; gap: 0.4rem;}
 button {
 padding: 0.4rem 0.8rem;
 border: none;
@@ -104,15 +104,15 @@ background: #4a4a4a;
 color: white;
 font-size: 0.9rem;
 }
-button:hover { background: #666; }
-button.active { background: #2e7d32; }
+button:hover { background: #666;}
+button.active { background: #2e7d32;}
 #status-line {
 min-height: 1.5rem;
 font-weight: bold;
 color: #ddd;
 }
-.fen-area { display: flex; gap: 0.3rem; margin-top: 0.5rem; flex-wrap: wrap; }
-#fen-input { flex: 1; padding: 0.3rem; min-width: 150px; }
+.fen-area { display: flex; gap: 0.3rem; margin-top: 0.5rem; flex-wrap: wrap;}
+#fen-input { flex: 1; padding: 0.3rem; min-width: 150px;}
 #halfmove-clock {
 margin-top: 4px;
 font-family: 'pixelnum', monospace;
@@ -124,112 +124,10 @@ padding: 0.3rem 0.6rem;
 font-size: 0.8rem;
 background: #5a5a5a;
 }
-.export-btn:hover { background: #7a7a7a; }
+.export-btn:hover { background: #7a7a7a;}
 @media (max-width: 600px) {
-.app { flex-direction: column; align-items: center; }
-.sidebar { width: 100%; }
-}
-
-@font-face {
-font-family: 'pixelnum';
-src: url('pixelnum.ttf') format('truetype');
-}
-.square {
-position: relative;
-display: flex;
-align-items: center;
-justify-content: center;
-font-family: 'pixelnum', sans-serif;
-font-size: calc(var(--square-size) * 0.75);
-color: #000;
-cursor: pointer;
-transition: background-color 0.15s, transform 0.05s;
-}
-.light { background-color: var(--light-square); }
-.dark{ background-color: var(--dark-square); }
-.square:active {
-filter: brightness(1.2);
-transform: scale(0.95);
-}
-.square.last-move { box-shadow: inset 0 0 10px rgba(255,255,0,0.7); }
-.square.selected {
-box-shadow: inset 0 0 15px rgba(0, 191, 255, 0.8);
-outline: 3px solid #00bfff;
-outline-offset: -3px;
-z-index: 2;
-}
-.square.move-highlight { background-color: rgba(0, 255, 0, 0.3) !important; }
-.square.capture-highlight {
-background-color: rgba(255, 0, 0, 0.3) !important;
-box-shadow: inset 0 0 0 4px rgba(255,0,0,0.5);
-}
-.square.king-checkmate::after {
-content: '';
-position: absolute;
-top: 0; left: 0; right: 0; bottom: 0;
-background: rgba(255, 0, 0, 0.5);
-pointer-events: none;
-z-index: 3;
-}
-#board-container.flipped { transform: rotate(180deg); }
-#board-container.flipped .square { transform: rotate(180deg); }
-.promotion-modal {
-position: fixed; top: 50%; left: 50%;
-transform: translate(-50%, -50%);
-background: #eee; padding: 1rem; border-radius: 8px;
-display: flex; gap: 0.5rem; z-index: 1000;
-box-shadow: 0 0 20px rgba(0,0,0,0.4);
-}
-.promotion-modal button {
-font-size: 2rem; width: 3rem; height: 3rem;
-background: white; border: 2px solid #999; cursor: pointer;
-}
-.drag-ghost {
-position: fixed; pointer-events: none;
-font-family: 'pixelnum', sans-serif;
-font-size: calc(var(--square-size) * 0.75);
-color: rgba(0,0,0,0.85); z-index: 1001;
-width: var(--square-size);
-height: var(--square-size);
-display: flex;
-align-items: center;
-justify-content: center;
-}
-
-.attack-overlay {
-position: absolute;
-top: 2px;
-left: 2px;
-right: 2px;
-display: flex;
-justify-content:
-font-size: 0.5rem;
-font-weight: bold;
-pointer-events: none;
-font-family: 'pixelnum', monospace;
-z-index: 10;
-line-height: 1;
-}
-
-
-.attack-white { 
-color: #fff; 
-text-shadow: 0 0 3px rgba(0,0,0,0.9);
-}
-
-
-.attack-black { 
-color: #000; 
-text-shadow: 0 0 3px rgba(255,255,255,0.9);
-}
-#board-container.img-import {
-background-size: 100% 100%;
-background-position: center;
-box-shadow: none;
-}
-#board-container.img-import .square {
-background-color: transparent !important;
-}
+.app { flex-direction: column; align-items: center;}
+.sidebar { width: 100%;}}
 </style>
 </head>
 <body>
@@ -287,7 +185,7 @@ return String.fromCharCode(97 + col) + (8 - row);
 function squareToCoords(sq) {
 const file = sq.charCodeAt(0) - 97;
 const rank = parseInt(sq[1]);
-return { row: 8 - rank, col: file };
+return { row: 8 - rank, col: file};
 }
 
 (function() {
@@ -327,14 +225,13 @@ this.startTime = null;
 const time = this._format();
 this.tickCallbacks.forEach(cb => cb(time));
 }
-onTick(cb) { this.tickCallbacks.push(cb); }
+onTick(cb) { this.tickCallbacks.push(cb);}
 _format() {
 const totalSec = Math.floor(this.elapsed);
 const mins = Math.floor(totalSec / 60);
 const secs = totalSec % 60;
 return mins + ':' + (secs < 10 ? '0' : '') + secs;
-}
-}
+}}
 window.MoveTimer = MoveTimer;
 })();
 
@@ -361,7 +258,7 @@ this.board = [
 ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
 ];
 this.turn = 'w';
-this.castlingRights = { K: true, Q: true, k: true, q: true };
+this.castlingRights = { K: true, Q: true, k: true, q: true};
 this.enPassantTarget = null;
 this.halfmoveClock = 0;
 this.fullmoveNumber = 1;
@@ -374,18 +271,17 @@ this._lastMove = null;
 this._recordPosition();
 }
 
-isWhite(piece) { return /^[A-Z]$/.test(piece); }
-isBlack(piece) { return /^[a-z]$/.test(piece); }
-colorOf(piece) { return piece === '.' ? null : (this.isWhite(piece) ? 'w' : 'b'); }
-cloneBoard() { return this.board.map(row => [...row]); }
+isWhite(piece) { return /^[A-Z]$/.test(piece);}
+isBlack(piece) { return /^[a-z]$/.test(piece);}
+colorOf(piece) { return piece === '.' ? null : (this.isWhite(piece) ? 'w' : 'b');}
+cloneBoard() { return this.board.map(row => [...row]);}
 
 findKing(color) {
 const king = color === 'w' ? 'K' : 'k';
 for (let r = 0; r < 8; r++) {
 for (let c = 0; c < 8; c++) {
 if (this.board[r][c] === king) return [r, c];
-}
-}
+}}
 return null;
 }
 
@@ -394,8 +290,7 @@ for (let row = 0; row < 8; row++) {
 for (let col = 0; col < 8; col++) {
 if (this.colorOf(this.board[row][col]) !== attackerColor) continue;
 if (this.canPieceMove(row, col, r, c)) return true;
-}
-}
+}}
 return false;
 }
 
@@ -434,8 +329,7 @@ case 'R': return (dr === 0 || dc === 0) && this.checkSlidingPath(fromRow, fromCo
 case 'Q': return (dr === 0 || dc === 0 || absDr === absDc) && this.checkSlidingPath(fromRow, fromCol, toRow, toCol);
 case 'K': return absDr <= 1 && absDc <= 1;
 default: return false;
-}
-}
+}}
 
 checkSlidingPath(fromRow, fromCol, toRow, toCol) {
 const dr = Math.sign(toRow - fromRow);
@@ -504,7 +398,7 @@ return this.doesMoveLeaveKingSafe(fromRow, fromCol, toRow, toCol, true);
 doesMoveLeaveKingSafe(fromRow, fromCol, toRow, toCol, enPassant = false) {
 const originalBoard = this.board;
 const originalEnPassant = this.enPassantTarget;
-const originalCastling = { ...this.castlingRights };
+const originalCastling = { ...this.castlingRights};
 this.board = this.cloneBoard();
 this.makeMoveOnBoard(fromRow, fromCol, toRow, toCol, enPassant);
 const kingSafe = !this.isInCheck(this.turn);
@@ -520,8 +414,7 @@ this.board[toRow][toCol] = piece;
 this.board[fromRow][fromCol] = '.';
 if (enPassantCapture) {
 this.board[fromRow][toCol] = '.';
-}
-}
+}}
 
 getLegalMoves(fromRow, fromCol) {
 const moves = [];
@@ -530,9 +423,8 @@ if (piece === '.' || this.colorOf(piece) !== this.turn) return moves;
 for (let toRow = 0; toRow < 8; toRow++) {
 for (let toCol = 0; toCol < 8; toCol++) {
 if (this.isMoveLegal(fromRow, fromCol, toRow, toCol)) {
-moves.push({ to: coordsToSquare(toRow, toCol), toRow, toCol });
-}
-}
+moves.push({ to: coordsToSquare(toRow, toCol), toRow, toCol});
+}}
 }
 return moves;
 }
@@ -545,14 +437,13 @@ const piece = this.board[row][col];
 if (piece !== '.' && this.colorOf(piece) === this.turn) {
 const sq = coordsToSquare(row, col);
 legalMovesMap.set(sq, this.getLegalMoves(row, col));
-}
-}
+}}
 }
 this._updateGameStatus();
 return {
 board: this.cloneBoard(),
 turn: this.turn,
-castlingRights: { ...this.castlingRights },
+castlingRights: { ...this.castlingRights},
 enPassantTarget: this.enPassantTarget,
 halfmoveClock: this.halfmoveClock,
 fullmoveNumber: this.fullmoveNumber,
@@ -608,9 +499,8 @@ const type = piece.toUpperCase();
 if (type === 'R' || type === 'Q') hasRooksOrQueens = true;
 else if (type === 'P') hasPawns = true;
 else if (type === 'N') knights++;
-else if (type === 'B') bishops.push({ row: r, col: c });
-}
-}
+else if (type === 'B') bishops.push({ row: r, col: c});
+}}
 if (hasRooksOrQueens || hasPawns) return false;
 if (knights === 0 && bishops.length === 0) return true;
 if (bishops.length === 0 && knights > 0 && knights <= 2) return true;
@@ -636,8 +526,7 @@ this._status = 'insufficient';
 this._status = 'check';
 } else {
 this._status = 'active';
-}
-}
+}}
 
 _hasAnyLegalMoves() {
 for (let row = 0; row < 8; row++) {
@@ -645,15 +534,14 @@ for (let col = 0; col < 8; col++) {
 const piece = this.board[row][col];
 if (piece !== '.' && this.colorOf(piece) === this.turn) {
 if (this.getLegalMoves(row, col).length > 0) return true;
-}
-}
+}}
 }
 return false;
 }
 
 executeMove(fromSq, toSq, promotionPiece = 'q') {
-const { row: fromRow, col: fromCol } = squareToCoords(fromSq);
-const { row: toRow, col: toCol } = squareToCoords(toSq);
+const { row: fromRow, col: fromCol} = squareToCoords(fromSq);
+const { row: toRow, col: toCol} = squareToCoords(toSq);
 if (!this.isMoveLegal(fromRow, fromCol, toRow, toCol)) return false;
 const piece = this.board[fromRow][fromCol];
 const color = this.turn;
@@ -677,7 +565,7 @@ enPassantCapture = true;
 this._history.push({
 board: this.cloneBoard(),
 turn: this.turn,
-castlingRights: { ...this.castlingRights },
+castlingRights: { ...this.castlingRights},
 enPassantTarget: this.enPassantTarget,
 halfmoveClock: this.halfmoveClock,
 fullmoveNumber: this.fullmoveNumber,
@@ -700,8 +588,8 @@ if (piece.toUpperCase() === 'P' && Math.abs(dr) === 2) {
 const epRow = color === 'w' ? fromRow - 1 : fromRow + 1;
 this.enPassantTarget = [epRow, fromCol];
 }
-if (piece === 'K') { this.castlingRights.K = false; this.castlingRights.Q = false; }
-if (piece === 'k') { this.castlingRights.k = false; this.castlingRights.q = false; }
+if (piece === 'K') { this.castlingRights.K = false; this.castlingRights.Q = false;}
+if (piece === 'k') { this.castlingRights.k = false; this.castlingRights.q = false;}
 if (piece === 'R') {
 if (fromRow === 7 && fromCol === 0) this.castlingRights.Q = false;
 if (fromRow === 7 && fromCol === 7) this.castlingRights.K = false;
@@ -732,7 +620,7 @@ this._pgnMoves.push(moveNotation);
 
 if (this.turn === 'b') this.fullmoveNumber++;
 this.turn = this.turn === 'w' ? 'b' : 'w';
-this._lastMove = { from: fromSq, to: toSq };
+this._lastMove = { from: fromSq, to: toSq};
 this._recordPosition();
 this._fireUpdate('move');
 return true;
@@ -743,7 +631,7 @@ if (this._history.length === 0) return false;
 this._redoStack.push({
 board: this.cloneBoard(),
 turn: this.turn,
-castlingRights: { ...this.castlingRights },
+castlingRights: { ...this.castlingRights},
 enPassantTarget: this.enPassantTarget,
 halfmoveClock: this.halfmoveClock,
 fullmoveNumber: this.fullmoveNumber,
@@ -770,7 +658,7 @@ if (this._redoStack.length === 0) return false;
 this._history.push({
 board: this.cloneBoard(),
 turn: this.turn,
-castlingRights: { ...this.castlingRights },
+castlingRights: { ...this.castlingRights},
 enPassantTarget: this.enPassantTarget,
 halfmoveClock: this.halfmoveClock,
 fullmoveNumber: this.fullmoveNumber,
@@ -792,7 +680,7 @@ this._fireUpdate('redo');
 return true;
 }
 
-onUpdate(cb) { this._listeners.push(cb); }
+onUpdate(cb) { this._listeners.push(cb);}
 _fireUpdate(action) {
 const state = this.getState();
 for (const cb of this._listeners) cb(state, action);
@@ -806,10 +694,9 @@ for (let c = 0; c < 8; c++) {
 const piece = this.board[r][c];
 if (piece === '.') empty++;
 else {
-if (empty > 0) { fen += empty; empty = 0; }
+if (empty > 0) { fen += empty; empty = 0;}
 fen += piece;
-}
-}
+}}
 if (empty > 0) fen += empty;
 if (r < 7) fen += '/';
 }
@@ -871,7 +758,7 @@ loadFEN(fen) {
 const parts = fen.trim().split(/\s+/);
 if (parts.length < 6) throw new Error('Invalid FEN');
 const [placement, turn, castlingStr, enPassant, halfmove, fullmove] = parts;
-this.board = Array.from({ length: 8 }, () => Array(8).fill('.'));
+this.board = Array.from({ length: 8}, () => Array(8).fill('.'));
 const ranks = placement.split('/');
 for (let row = 0; row < 8; row++) {
 let col = 0;
@@ -880,8 +767,7 @@ if (ch >= '1' && ch <= '8') col += parseInt(ch);
 else if ('pnbrqkPNBRQK'.includes(ch)) {
 this.board[row][col] = ch;
 col++;
-}
-}
+}}
 }
 this.turn = turn;
 this.castlingRights = {
@@ -889,7 +775,7 @@ K: castlingStr.includes('K'), Q: castlingStr.includes('Q'),
 k: castlingStr.includes('k'), q: castlingStr.includes('q')
 };
 if (enPassant !== '-') {
-const { row, col } = squareToCoords(enPassant);
+const { row, col} = squareToCoords(enPassant);
 this.enPassantTarget = [row, col];
 } else {
 this.enPassantTarget = null;
@@ -904,8 +790,7 @@ this._lastMove = null;
 this._status = 'active';
 this._recordPosition();
 this._fireUpdate('fen');
-}
-}
+}}
 window.ChessGame = ChessGame;
 })();
 
@@ -944,8 +829,7 @@ squareDiv.setAttribute('role', 'gridcell');
 squareDiv.setAttribute('aria-label', sq);
 squareDiv.addEventListener('pointerdown', onPointerDown);
 boardEl.appendChild(squareDiv);
-}
-}
+}}
 document.addEventListener('pointermove', onPointerMove);
 document.addEventListener('pointerup', onPointerUp);
 }
@@ -954,7 +838,7 @@ function renderBoard(state) {
 const squares = boardEl.querySelectorAll('.square');
 squares.forEach(sq => {
 const sqName = sq.dataset.square;
-const { row, col } = squareToCoords(sqName);
+const { row, col} = squareToCoords(sqName);
 const piece = state.board[row][col];
 sq.textContent = pieceToSymbol(piece) || '';
 sq.className = 'square';
@@ -963,8 +847,7 @@ else sq.classList.add('dark');
 if (state.lastMove) {
 if (sqName === state.lastMove.from || sqName === state.lastMove.to) {
 sq.classList.add('last-move');
-}
-}
+}}
 if (selectedSquare === sqName) sq.classList.add('selected');
 });
 if (selectedSquare && state.legalMoves && state.legalMoves.has(selectedSquare)) {
@@ -972,14 +855,13 @@ const moves = state.legalMoves.get(selectedSquare);
 moves.forEach(m => {
 const targetSquare = boardEl.querySelector(`[data-square="${m.to}"]`);
 if (targetSquare) {
-const { row: tr, col: tc } = squareToCoords(m.to);
+const { row: tr, col: tc} = squareToCoords(m.to);
 const pieceAtTarget = state.board[tr][tc];
 if (pieceAtTarget && pieceAtTarget !== '.') {
 targetSquare.classList.add('capture-highlight');
 } else {
 targetSquare.classList.add('move-highlight');
-}
-}
+}}
 });
 }
 if (state.status === 'checkmate') {
@@ -992,10 +874,8 @@ const sq = coordsToSquare(r, c);
 const kingSquare = boardEl.querySelector(`[data-square="${sq}"]`);
 if (kingSquare) kingSquare.classList.add('king-checkmate');
 break;
-}
-}
-}
-}
+}}
+}}
 }
 
 function updateStatus(state) {
@@ -1014,8 +894,7 @@ statusEl.textContent = 'Draw (50-move rule).';
 statusEl.textContent = 'Draw (threefold repetition).';
 } else if (state.status === 'insufficient') {
 statusEl.textContent = 'Draw (insufficient material).';
-}
-}
+}}
 
 function updateMoveList(state, action) {
 if (action === 'move') {
@@ -1053,8 +932,7 @@ moveListEl.scrollTop = moveListEl.scrollHeight;
 
 moveCount++;
 if (moveCount % 2 === 0) moveNumber++;
-}
-} else if (action === 'undo') {
+}} else if (action === 'undo') {
 if (moveListEl.lastChild) moveListEl.removeChild(moveListEl.lastChild);
 moveCount--;
 if (moveCount > 0 && moveCount % 2 === 0) moveNumber--;
@@ -1066,8 +944,7 @@ moveNumber = 1;
 moveCount = 0;
 } else if (action === 'time-toggle') {
 rebuildMoveListFromState();
-}
-}
+}}
 
 function rebuildMoveListFromState() {
 const entries = moveListEl.querySelectorAll('.move-entry');
@@ -1079,11 +956,9 @@ timeSpan = document.createElement('span');
 timeSpan.className = 'move-time';
 timeSpan.textContent = '—';
 entry.appendChild(timeSpan);
-}
-} else {
+}} else {
 if (timeSpan) timeSpan.remove();
-}
-});
+}});
 }
 
 function updateHalfmoveClock(state) {
@@ -1099,14 +974,13 @@ if (!on) {
 document.querySelectorAll('.attack-overlay').forEach(e => e.remove());
 } else {
 if (window.attackLvl) window.attackLvl.update(game.getState());
-}
-}
+}}
 
 function handleSquareTap(sq) {
 if (promotionPending) return;
 const state = game.getState();
 if (state.status !== 'active' && state.status !== 'check') return;
-const { row, col } = squareToCoords(sq);
+const { row, col} = squareToCoords(sq);
 const piece = state.board[row][col];
 if (selectedSquare) {
 if (selectedSquare === sq) {
@@ -1117,10 +991,10 @@ return;
 const moves = state.legalMoves.get(selectedSquare) || [];
 const move = moves.find(m => m.to === sq);
 if (move) {
-const { row: toRow, col: toCol } = squareToCoords(sq);
+const { row: toRow, col: toCol} = squareToCoords(sq);
 const movingPiece = state.board[squareToCoords(selectedSquare).row][squareToCoords(selectedSquare).col];
 if (movingPiece.toUpperCase() === 'P' && (toRow === 0 || toRow === 7)) {
-promotionPending = { from: selectedSquare, to: sq };
+promotionPending = { from: selectedSquare, to: sq};
 showPromotionModal();
 return;
 }
@@ -1134,15 +1008,13 @@ renderBoard(state);
 } else {
 selectedSquare = null;
 renderBoard(state);
-}
-}
+}}
 } else {
 if (piece && piece !== '.' && ((state.turn === 'w' && piece === piece.toUpperCase()) ||
 (state.turn === 'b' && piece !== piece.toUpperCase()))) {
 selectedSquare = sq;
 renderBoard(state);
-}
-}
+}}
 }
 
 function showPromotionModal() {
@@ -1165,8 +1037,7 @@ if (promotionPending) {
 game.executeMove(promotionPending.from, promotionPending.to, p);
 promotionPending = null;
 modal.remove();
-}
-};
+}};
 modal.appendChild(btn);
 });
 document.body.appendChild(modal);
@@ -1200,8 +1071,7 @@ startY = e.clientY;
 const rect = e.currentTarget.getBoundingClientRect();
 dragOffsetX = e.clientX - rect.left;
 dragOffsetY = e.clientY - rect.top;
-try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
-}
+try { e.currentTarget.setPointerCapture(e.pointerId);} catch (err) {}}
 
 function onPointerMove(e) {
 if (!dragStartSquare) return;
@@ -1210,7 +1080,7 @@ const dx = Math.abs(e.clientX - startX);
 const dy = Math.abs(e.clientY - startY);
 if (!isDragging && (dx > 8 || dy > 8)) {
 const state = game.getState();
-const { row, col } = squareToCoords(dragStartSquare);
+const { row, col} = squareToCoords(dragStartSquare);
 const piece = state.board[row][col];
 if (!piece || piece === '.') return;
 const pieceClr = piece === piece.toUpperCase() ? 'w' : 'b';
@@ -1229,8 +1099,7 @@ e.preventDefault();
 const squareSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--square-size')) || 60;
 dragGhost.style.left = (e.clientX - squareSize / 2) + 'px';
 dragGhost.style.top = (e.clientY - squareSize / 2) + 'px';
-}
-}
+}}
 
 function onPointerUp(e) {
 if (!dragStartSquare) return;
@@ -1246,15 +1115,14 @@ const state = game.getState();
 const moves = state.legalMoves.get(dragStartSquare) || [];
 const move = moves.find(m => m.to === targetSquare);
 if (move) {
-const { row: toRow, col: toCol } = squareToCoords(targetSquare);
+const { row: toRow, col: toCol} = squareToCoords(targetSquare);
 const movingPiece = state.board[squareToCoords(dragStartSquare).row][squareToCoords(dragStartSquare).col];
 if (movingPiece.toUpperCase() === 'P' && (toRow === 0 || toRow === 7)) {
-promotionPending = { from: dragStartSquare, to: targetSquare };
+promotionPending = { from: dragStartSquare, to: targetSquare};
 showPromotionModal();
 } else {
 game.executeMove(dragStartSquare, targetSquare, 'q');
-}
-}
+}}
 }
 selectedSquare = null;
 } else {
@@ -1274,8 +1142,7 @@ if (state.status !== 'active' && state.status !== 'check') {
 timer.stop();
 } else if (!timer.running) {
 timer.start();
-}
-}
+}}
 
 document.getElementById('undo-btn').addEventListener('click', () => {
 selectedSquare = null;
@@ -1312,8 +1179,7 @@ cleanupDrag();
 game.loadFEN(fen);
 } catch (e) {
 alert('Invalid FEN');
-}
-}
+}}
 });
 
 document.getElementById('fen-copy-btn').addEventListener('click', () => {
@@ -1323,7 +1189,7 @@ navigator.clipboard.writeText(output).then(() => {
 const btn = document.getElementById('fen-copy-btn');
 const original = btn.textContent;
 btn.textContent = '✓ Copied!';
-setTimeout(() => { btn.textContent = original; }, 2000);
+setTimeout(() => { btn.textContent = original;}, 2000);
 }).catch(err => {
 alert('Failed to copy FEN');
 });
@@ -1336,13 +1202,13 @@ navigator.clipboard.writeText(output).then(() => {
 const btn = document.getElementById('pgn-copy-btn');
 const original = btn.textContent;
 btn.textContent = '✓ Copied!';
-setTimeout(() => { btn.textContent = original; }, 2000);
+setTimeout(() => { btn.textContent = original;}, 2000);
 }).catch(err => {
 alert('Failed to copy PGN');
 });
 });
 
-timer.onTick((formatted) => { timerEl.textContent = formatted; });
+timer.onTick((formatted) => { timerEl.textContent = formatted;});
 
 game.onUpdate((state, action) => {
 renderBoard(state);
@@ -1360,8 +1226,7 @@ localStorage.setItem('chessState', game.getFEN());
 function loadFromStorage() {
 const saved = localStorage.getItem('chessState');
 if (saved) {
-try { game.loadFEN(saved); } catch(e) { console.log('Could not load saved game'); }
-}
+try { game.loadFEN(saved);} catch(e) { console.log('Could not load saved game');}}
 }
 
 initBoard();
@@ -1434,8 +1299,7 @@ case 'R': return (dr === 0 || dc === 0) && checkSlidingPathAttack(state, fromRow
 case 'Q': return (dr === 0 || dc === 0 || absDr === absDc) && checkSlidingPathAttack(state, fromRow, fromCol, toRow, toCol);
 case 'K': return absDr <= 1 && absDc <= 1;
 default: return false;
-}
-}
+}}
 function checkSlidingPathAttack(state, fromRow, fromCol, toRow, toCol) {
 const dr = Math.sign(toRow - fromRow);
 const dc = Math.sign(toCol - fromCol);
@@ -1463,8 +1327,7 @@ if (canPieceAttack(state, r, c, targetRow, targetCol)) {
 const color = piece === piece.toUpperCase() ? 'w' : 'b';
 if (color === 'w') whiteAttacks++;
 else blackAttacks++;
-}
-}
+}}
 }
 if (whiteAttacks > 0 || blackAttacks > 0) {
 const squareDiv = container.querySelector(`[data-square="${sq}"]`);
@@ -1473,12 +1336,9 @@ const overlay = document.createElement('div');
 overlay.className = 'attack-overlay';
 overlay.innerHTML = `<span class="attack-white">${whiteAttacks}</span><span class="attack-black">${blackAttacks}</span>`;
 squareDiv.appendChild(overlay);
-}
-}
-}
-}
-}
-};
+}}
+}}
+}};
 })();
 
 (function() {
@@ -1522,5 +1382,107 @@ visible = false;
 });
 })();
 </script>
+
+<style>
+@font-face {
+font-family: 'pixelnum';
+src: url('pixelnum.ttf') format('truetype');
+}
+.square {
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: 'pixelnum', sans-serif;
+font-size: calc(var(--square-size) * 0.75);
+color: #000;
+cursor: pointer;
+transition: background-color 0.15s, transform 0.05s;
+}
+.light { background-color: var(--light-square);}
+.dark{ background-color: var(--dark-square);}
+.square:active {
+filter: brightness(1.2);
+transform: scale(0.95);
+}
+.square.last-move { box-shadow: inset 0 0 10px rgba(255,255,0,0.7);}
+.square.selected {
+box-shadow: inset 0 0 15px rgba(0, 191, 255, 0.8);
+outline: 3px solid #00bfff;
+outline-offset: -3px;
+z-index: 2;
+}
+.square.move-highlight { background-color: rgba(0, 255, 0, 0.3) !important;}
+.square.capture-highlight {
+background-color: rgba(255, 0, 0, 0.3) !important;
+box-shadow: inset 0 0 0 4px rgba(255,0,0,0.5);
+}
+.square.king-checkmate::after {
+content: '';
+position: absolute;
+top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(255, 0, 0, 0.5);
+pointer-events: none;
+z-index: 3;
+}
+#board-container.flipped { transform: rotate(180deg);}
+#board-container.flipped .square { transform: rotate(180deg);}
+.promotion-modal {
+position: fixed; top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+background: #eee; padding: 1rem; border-radius: 8px;
+display: flex; gap: 0.5rem; z-index: 1000;
+box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+.promotion-modal button {
+font-size: 2rem; width: 3rem; height: 3rem;
+background: white; border: 2px solid #999; cursor: pointer;
+}
+.drag-ghost {
+position: fixed; pointer-events: none;
+font-family: 'pixelnum', sans-serif;
+font-size: calc(var(--square-size) * 0.75);
+color: rgba(0,0,0,0.85); z-index: 1001;
+width: var(--square-size);
+height: var(--square-size);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.attack-overlay {
+position: absolute;
+top: 2px;
+left: 2px;
+right: 2px;
+display: flex;
+justify-content:
+font-size: 0.5rem;
+font-weight: bold;
+pointer-events: none;
+font-family: 'pixelnum', monospace;
+z-index: 10;
+line-height: 1;
+}
+
+.attack-white { 
+color: #fff; 
+text-shadow: 0 0 3px rgba(0,0,0,0.9);
+}
+
+.attack-black { 
+color: #000; 
+text-shadow: 0 0 3px rgba(255,255,255,0.9);
+}
+#board-container.img-import {
+background-size: 100% 100%;
+background-position: center;
+box-shadow: none;
+}
+#board-container.img-import .square {
+background-color: transparent !important;
+}
+</style>
+
 </body>
 </html>
