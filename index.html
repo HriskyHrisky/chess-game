@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +11,6 @@
 :root {
 --light-square: #f0d9b5;
 --dark-square: #b58863;
---board-size: min(80vw, 80vh, 500px);
---square-size: calc(var(--board-size) / 8);
 }
 * { box-sizing: border-box; margin: 0; padding: 0;}
 body {
@@ -37,8 +36,10 @@ position: relative;
 padding-top: 35px;
 }
 #board-container {
-width: var(--board-size);
-height: var(--board-size);
+--square-size: calc(100% / 8);
+width: 100%;
+max-width: 250px;
+aspect-ratio: 1 / 1;
 display: grid;
 grid-template-columns: repeat(8, 1fr);
 grid-template-rows: repeat(8, 1fr);
@@ -140,7 +141,8 @@ display: flex;
 align-items: center;
 justify-content: center;
 font-family: 'pixelnum', sans-serif;
-font-size: calc(var(--square-size) * 0.75);
+font-size: calc(var(--square-size) * 10);
+line-height: 1;
 cursor: pointer;
 transition: background-color 0.15s;
 }
@@ -204,10 +206,7 @@ display: flex; align-items: center; justify-content: center;
 position: fixed;
 pointer-events: none;
 font-family: 'pixelnum', sans-serif;
-font-size: calc(var(--square-size) * 0.85);
 z-index: 10000;
-width: var(--square-size);
-height: var(--square-size);
 display: flex;
 align-items: center;
 justify-content: center;
@@ -408,7 +407,7 @@ text-align: center;
 <div class="custom-panel-drag-handle">⋮⋮</div>
 </div>
 <div class="custom-panel-content">
-<div class="custom-mode-hint">Click a piece, then click a square. Drag also works.</div>
+<div class="custom-mode-hint">Tap a piece, then tap a square. Drag & drop works too.</div>
 <div class="custom-palette">
 <div class="palette-row" id="palette-white"></div>
 <div class="palette-row" id="palette-black"></div>
@@ -1328,13 +1327,13 @@ statusEl.textContent = (state.turn === 'w' ? 'White' : 'Black') + ' is in check'
 const winner = state.turn === 'w' ? 'Black' : 'White';
 statusEl.textContent = 'Checkmate! ' + winner + ' wins.';
 } else if (state.status === 'stalemate') {
-statusEl.textContent = 'Stalemate! Draw.';
+statusEl.textContent = 'Draw (Stalemate)';
 } else if (state.status === 'draw50') {
-statusEl.textContent = 'Draw (50-move rule).';
+statusEl.textContent = 'Draw (50-move rule)';
 } else if (state.status === 'repetition') {
-statusEl.textContent = 'Draw (threefold repetition).';
+statusEl.textContent = 'Draw (threefold repetition)';
 } else if (state.status === 'insufficient') {
-statusEl.textContent = 'Draw (insufficient material).';
+statusEl.textContent = 'Draw (insufficient material)';
 }}
 
 function updateMoveList(state, action) {
@@ -1498,6 +1497,10 @@ const ghost = document.createElement('div');
 ghost.className = 'drag-ghost';
 ghost.id = 'custom-drag-ghost';
 ghost.innerHTML = pieceToSymbol(piece);
+const squarePx = boardEl.clientWidth / 8;
+ghost.style.fontSize = squarePx + 'px';
+ghost.style.width = squarePx + 'px';
+ghost.style.height = squarePx + 'px';
 document.body.appendChild(ghost);
 ghost.style.left = e.clientX + 'px';
 ghost.style.top = e.clientY + 'px';
@@ -1585,6 +1588,10 @@ if (customDragPiece && !dragGhost) {
             dragGhost.className = 'drag-ghost';
             dragGhost.id = 'custom-drag-ghost';
             dragGhost.innerHTML = pieceToSymbol(customDragPiece);
+            const squarePx = boardEl.clientWidth / 8;
+            dragGhost.style.fontSize = squarePx + 'px';
+            dragGhost.style.width = squarePx + 'px';
+            dragGhost.style.height = squarePx + 'px';
             document.body.appendChild(dragGhost);
         }
     }
@@ -1614,6 +1621,10 @@ if (!isDragging && dragStartSquare && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
     dragGhost = document.createElement('div');
     dragGhost.className = 'drag-ghost';
     dragGhost.innerHTML = pieceToSymbol(piece);
+    const squarePx = boardEl.clientWidth / 8;
+    dragGhost.style.fontSize = squarePx + 'px';
+    dragGhost.style.width = squarePx + 'px';
+    dragGhost.style.height = squarePx + 'px';
     document.body.appendChild(dragGhost);
 }
 
