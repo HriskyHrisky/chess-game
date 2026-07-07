@@ -129,17 +129,22 @@ background: #666;
 button.active {
 background: #2e7d32;
 }
+
 #status-line {
-min-height: 1.5rem;
+width: 100%;
+max-width: 250px;
+margin: 4px 0;
+min-height: 2em;
 font-weight: bold;
 color: #ddd;
-white-space: nowrap;
+white-space: pre-wrap;
 overflow: hidden;
-text-overflow: ellipsis;
-font-size: 1rem;
-max-width: 100%;
+font-size: 0.75rem;
+border: 1px solid transparent;
 box-sizing: border-box;
+line-height: 1.3;
 }
+
 .fen-area {
 display: flex;
 gap: 0.3rem;
@@ -433,31 +438,68 @@ background: #a33;
 box-shadow: 0 0 4px rgba(255, 82, 82, 0.6);
 }
 
-.custom-toggle-btn, .custom-castle-btn, .custom-chess960-btn {
-width: auto;
-min-width: 28px;
-height: 22px;
-background: #444;
-border: 1px solid #666;
-border-radius: 3px;
-color: #ccc;
-font-size: 0.55rem;
-cursor: pointer;
-padding: 0 4px;
-display: flex;
-align-items: center;
-justify-content: center;
+.custom-toggle-btn {
+  width: auto;
+  min-width: 28px;
+  height: 22px;
+  background: #f0c000;
+  border: 1px solid #e6b800;
+  border-radius: 3px;
+  color: #000;
+  font-size: 0.55rem;
+  cursor: pointer;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.custom-toggle-btn.active, .custom-castle-btn.active {
-background: #2e7d32;
-border-color: #4caf50;
+.custom-toggle-btn:hover,
+.custom-toggle-btn:active {
+  background: #f0c000;
 }
+
+.custom-castle-btn {
+  width: auto;
+  min-width: 28px;
+  height: 22px;
+  background: #444;
+  border: 1px solid #666;
+  border-radius: 3px;
+  color: #ccc;
+  font-size: 0.55rem;
+  cursor: pointer;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.custom-castle-btn:hover {
+  background: #555;
+}
+.custom-castle-btn.active {
+  background: #2e7d32;
+  border-color: #4caf50;
+}
+
 .custom-chess960-btn {
-background: #5a4a2a;
+  width: auto;
+  min-width: 28px;
+  height: 22px;
+  background: #5a4a2a;
+  border: 1px solid #666;
+  border-radius: 3px;
+  color: #ccc;
+  font-size: 0.55rem;
+  cursor: pointer;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .custom-chess960-btn:hover {
-background: #7a5a3a;
+  background: #7a5a3a;
 }
+
 .custom-actions {
 display: flex;
 gap: 3px;
@@ -517,7 +559,6 @@ text-align: center;
 </div>
 </div>
 
-<!-- Custom Mode Panel (hidden by default) -->
 <div id="custom-panel" class="custom-panel" style="display: none">
 <div class="custom-panel-header" id="custom-panel-header">
 <span>Custom</span>
@@ -530,7 +571,7 @@ text-align: center;
 <div class="palette-row" id="palette-black"></div>
 <div class="palette-row">
 <div class="palette-row">
-<button id="turn-toggle-btn" class="custom-toggle-btn active">White first</button>
+<button id="turn-toggle-btn" class="custom-toggle-btn">White first</button>
 <div class="palette-trash" id="palette-trash" title="Remove piece">🗑️</div>
 <button id="castle-white-btn" class="custom-castle-btn" title="White castling rights (KQ)">KQ</button>
 <button id="castle-black-btn" class="custom-castle-btn" title="Black castling rights (kq)">kq</button>
@@ -541,7 +582,7 @@ text-align: center;
 <button class="clear-btn" id="custom-clear">❌</button>
 <button id="custom-reset">Reset</button>
 <button id="chess960-btn" class="custom-chess960-btn" title="Random Chess960">960</button>
-<button class="back-btn" id="custom-back">✓ Done</button>
+<button class="back-btn" id="custom-back">✅</button>
 </div>
 </div>
 </div>
@@ -1183,11 +1224,6 @@ return fen;
 }
 
 getPGN() {
-const now = new Date();
-const dateStr = now.getFullYear() + '.' +
-String(now.getMonth() + 1).padStart(2, '0') + '.' +
-String(now.getDate()).padStart(2, '0');
-
 let result = '*';
 if (this._status === 'checkmate') {
 result = this.turn === 'w' ? '0-1' : '1-0';
@@ -1196,19 +1232,6 @@ result = this.turn === 'w' ? '0-1' : '1-0';
 result = '1/2-1/2';
 }
 
-let pgn = `[Event "Casual Game"]\n`;
-pgn += `[Site "https://hriskyhrisky.github.io/chess-game/"]\n`;
-pgn += `[Date "${dateStr}"]\n`;
-pgn += `[White "Player 1"]\n`;
-pgn += `[Black "Player 2"]\n`;
-pgn += `[Result "${result}"]\n`;
-
-if (this._history.length > 0 || this.getFEN() !== "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
-pgn += `[FEN "${this.getFEN()}"]\n`;
-pgn += `[SetUp "1"]\n`;
-}
-pgn += `\n`;
-
 let moveText = '';
 for (let i = 0; i < this._pgnMoves.length; i++) {
 if (i % 2 === 0) {
@@ -1216,10 +1239,7 @@ moveText += Math.floor(i / 2) + 1 + '. ';
 }
 moveText += this._pgnMoves[i] + ' ';
 }
-moveText += result;
-
-pgn += moveText + '\n';
-return pgn;
+return moveText.trim() + '\n\n' + result + '\n\n' + this.getFEN();
 }
 
 loadFEN(fen) {
@@ -1262,9 +1282,7 @@ this._fireUpdate('fen');
 window.ChessGame = ChessGame;
 })();
 
-// ═══════════════════════════════════════════════════════════
 // MAIN UI CONTROLLER
-// ═══════════════════════════════════════════════════════════
 (function() {
 const game = new ChessGame();
 const timer = new MoveTimer();
@@ -1283,8 +1301,12 @@ let customSelected = null;
 let customLastPlaced = null;
 let customDragPiece = null;
 let customDragFromBoard = null;
+let currentDragTarget = null;   // square under finger while dragging a board piece
 let customCastling = { white: false, black: false };
-let turnToggleBtn, castleWhiteBtn, castleBlackBtn, chess960Btn;
+let customTypeInterval = null;
+let customCycleTimeout = null;
+let cycleStartTime = 0;
+let currentTextIndex = 0;let turnToggleBtn, castleWhiteBtn, castleBlackBtn, chess960Btn;
 
 const CUSTOM_STATUS_TEXTS = [
 'Creating…',
@@ -1295,15 +1317,15 @@ const CUSTOM_STATUS_TEXTS = [
 'Sketching a new layout…',
 'Shaping the board…',
 'Almost ready!',
-'"The best programs are written so that computing machines can perform them quickly and so that human beings can understand them clearly."—Donald Knuth',
-'"What is now proved was once only imagined."—William Blake',
-'"The real voyage is in having new eyes."—Marcel Proust',
-'"A cathedral sleeps inside every rock pile."—Antoine de Saint‑Exupéry',
-'"Mystery creates wonder, and wonder fuels creation."—Neil Armstrong',
-'"The most beautiful things are born of madness and reason."—André Gide',
-'"One never finishes building a world."—Gaston Bachelard',
-'"Not only is the Universe stranger than we think, it is stranger than we can think."—Werner Heisenberg',
-];
+'"The best programs are written so that computing machines can perform them quickly and so that human beings can understand them clearly." — Donald Knuth',
+'"What is now proved was once only imagined." — William Blake',
+'"The real voyage is in having new eyes." — Marcel Proust',
+'"A cathedral sleeps inside every rock pile." — Antoine de Saint‑Exupéry',
+'"Mystery creates wonder, and wonder fuels creation." — Neil Armstrong',
+'"The most beautiful things are born of madness and reason." — André Gide',
+'"One never finishes building a world." — Gaston Bachelard',
+'"Not only is the Universe stranger than we think, it is stranger than we can think." — Werner Heisenberg',
+'"Life is not life without comedy and people who can tolerate it." — Hrisky (not a quote, хз)'];
 let customStatusIndex = 0;
 let customStatusInterval = null;
 let lastCustomStatusText = '';
@@ -1484,17 +1506,6 @@ if (window.invalidPosition) {
 statusEl.textContent = 'Invalid position!';
 return;
 }
-let isEmpty = true;
-for (let r = 0; r < 8; r++) {
-for (let c = 0; c < 8; c++) {
-if (state.board[r][c] !== '.') { isEmpty = false; break; }
-}
-if (!isEmpty) break;
-}
-if (isEmpty) {
-statusEl.textContent = 'Empty…';
-return;
-}
 if (state.status === 'active') {
 statusEl.textContent = (state.turn === 'w' ? 'White' : 'Black') + ' to move';
 } else if (state.status === 'check') {
@@ -1510,7 +1521,8 @@ statusEl.textContent = 'Draw (50-move rule)';
 statusEl.textContent = 'Draw (threefold repetition)';
 } else if (state.status === 'insufficient') {
 statusEl.textContent = 'Draw (insufficient material)';
-}}
+}
+}
 
 function updateMoveList(state, action) {
 if (action === 'move') {
@@ -1599,44 +1611,34 @@ customLastPlaced = null;
 customPanel.style.display = 'flex';
 customBtn.classList.add('active');
 selectedSquare = null;
-customStatusIndex = 0;
-statusEl.textContent = CUSTOM_STATUS_TEXTS[0];
-fitStatusText();
-lastCustomStatusText = CUSTOM_STATUS_TEXTS[0];
+timer.stop();
+timerEl.textContent = '-:--';
+clearTyping();
+currentTextIndex = 0;
 customStatusPersist = false;
-if (customStatusInterval) clearInterval(customStatusInterval);
-customStatusInterval = setInterval(() => {
-customStatusIndex = (customStatusIndex + 1) % CUSTOM_STATUS_TEXTS.length;
-statusEl.textContent = CUSTOM_STATUS_TEXTS[customStatusIndex];
-fitStatusText();
-lastCustomStatusText = CUSTOM_STATUS_TEXTS[customStatusIndex];
-}, 10000);
-
 customCastling = { white: false, black: false };
 updateTurnToggleButton();
 updateCastleButtons();
 
-// Sync panel width to board container
-syncCustomPanelWidth();
-
-// Keep width in sync on resize
-window.addEventListener('resize', syncCustomPanelWidth);
-customResizeListener = syncCustomPanelWidth;
+cycleStartTime = performance.now();
+const startCycle = () => {
+  if (currentTextIndex >= CUSTOM_STATUS_TEXTS.length) currentTextIndex = 0;
+  const raw = CUSTOM_STATUS_TEXTS[currentTextIndex];
+  const formatted = formatStatusText(raw);
+  lastCustomStatusText = raw;
+  typeText(formatted, () => {
+    const elapsed = performance.now() - cycleStartTime;
+    const remaining = Math.max(0, 10000 - elapsed);
+    customCycleTimeout = setTimeout(() => {
+      currentTextIndex++;
+      cycleStartTime = performance.now();
+      startCycle();
+    }, remaining);
+  });
+};
+startCycle();
 
 renderBoard(game.getState());
-updateStatus(game.getState());
-}
-
-function fitStatusText() {
-const el = statusEl;
-if (!el) return;
-el.style.fontSize = ''; // reset to CSS default
-let fontSize = parseFloat(getComputedStyle(el).fontSize);
-// Reduce until the text fits (minimum 7px)
-while (el.scrollWidth > el.clientWidth && fontSize > 7) {
-fontSize -= 0.5;
-el.style.fontSize = fontSize + 'px';
-}
 }
 
 function syncCustomPanelWidth() {
@@ -1653,18 +1655,8 @@ customPanel.style.display = 'none';
 customPanel.style.width = 'auto';
 customPanel.style.height = 'auto';
 customBtn.classList.remove('active');
-if (customStatusInterval) {
-clearInterval(customStatusInterval);
-customStatusInterval = null;
-}
-// Remove the resize listener
-if (customResizeListener) {
-window.removeEventListener('resize', customResizeListener);
-customResizeListener = null;
-}
-customStatusPersist = true;
-statusEl.textContent = lastCustomStatusText;
-fitStatusText();
+clearTyping();
+customStatusPersist = false;
 
 let placement = '';
 for (let r = 0; r < 8; r++) {
@@ -1714,6 +1706,57 @@ bBtn.addEventListener('click', () => selectCustomPiece('b' + p));
 bBtn.addEventListener('pointerdown', (e) => startPaletteDrag(e, 'b' + p));
 blackRow.appendChild(bBtn);
 });
+}
+
+function formatStatusText(text) {
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    if (currentLine.length === 40 && word.startsWith('.')) {
+      currentLine += word;
+      lines.push(currentLine);
+      currentLine = '';
+      continue;
+    }
+    if (currentLine.length + (currentLine ? 1 : 0) + word.length <= 40) {
+      currentLine += (currentLine ? ' ' : '') + word;
+    } else {
+      lines.push(currentLine);
+      currentLine = word;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+  return lines.join('\n');
+}
+
+function typeText(formatted, onComplete) {
+  let index = 0;
+  const chars = formatted.split('');
+  statusEl.textContent = '';
+  clearTyping();
+  customTypeInterval = setInterval(() => {
+    if (index < chars.length) {
+      statusEl.textContent += chars[index];
+      index++;
+    } else {
+      clearInterval(customTypeInterval);
+      customTypeInterval = null;
+      if (onComplete) onComplete();
+    }
+  }, 30);
+}
+
+function clearTyping() {
+  if (customTypeInterval) {
+    clearInterval(customTypeInterval);
+    customTypeInterval = null;
+  }
+  if (customCycleTimeout) {
+    clearTimeout(customCycleTimeout);
+    customCycleTimeout = null;
+  }
 }
 
 function selectCustomPiece(piece, force = false) {
@@ -1811,10 +1854,12 @@ e.preventDefault();
 if (customMode) {
 const state = game.getState();
 const piece = state.board[row][col];
-// Only start a board drag if no palette piece is selected.
-if (piece && piece !== '.' && !customSelected) {
+if (piece && piece !== '.') {
 customDragFromBoard = { row, col, piece };
 customDragPiece = null;
+// remove the green highlight while we drag this piece
+customLastPlaced = null;
+document.querySelectorAll('.square.custom-highlight').forEach(sq => sq.classList.remove('custom-highlight'));
 } else {
 customDragFromBoard = null;
 }
@@ -1857,13 +1902,8 @@ return;
 }
 
 if (customMode) {
-if (!customSelected) {
 isDragging = true;
 customDragFromBoard = { row, col, piece };
-} else {
-dragStartSquare = null;
-return;
-}
 } else {
 const pieceClr = piece === piece.toUpperCase() ? 'w' : 'b';
 if (pieceClr !== state.turn) {
@@ -1886,6 +1926,28 @@ document.body.appendChild(dragGhost);
 if (isDragging && dragGhost) {
 dragGhost.style.left = e.clientX + 'px';
 dragGhost.style.top = e.clientY + 'px';
+
+// ── dynamic target highlight while dragging a board piece ──
+if (customMode && customDragFromBoard) {
+  dragGhost.style.display = 'none';
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  dragGhost.style.display = '';
+  const sqEl = el ? el.closest('.square') : null;
+  const targetSq = sqEl ? sqEl.dataset.square : null;
+  if (targetSq !== currentDragTarget) {
+    // remove highlight from previous target
+    if (currentDragTarget) {
+      const prev = boardEl.querySelector(`[data-square="${currentDragTarget}"]`);
+      if (prev) prev.classList.remove('custom-highlight');
+    }
+    // add highlight to new target
+    if (targetSq) {
+      const newSq = boardEl.querySelector(`[data-square="${targetSq}"]`);
+      if (newSq) newSq.classList.add('custom-highlight');
+    }
+    currentDragTarget = targetSq;
+  }
+}
 }
 }
 
@@ -1916,31 +1978,45 @@ targetCol = coords.col;
 cleanupDrag();
 
 if (customMode) {
-if (targetSquare && targetRow >= 0) {
-if (fromBoard) {
-const { row: fr, col: fc, piece } = fromBoard;
-if (fr === targetRow && fc === targetCol) {
-if (!wasDragging) handleCustomSquareClick(targetRow, targetCol);
-} else {
-game.board[targetRow][targetCol] = piece;
-game.board[fr][fc] = '.';
-customLastPlaced = { row: targetRow, col: targetCol };
-customSelectedSquare = null;
-renderBoard(game.getState());
-}
-} else if (fromPalette) {
-game.board[targetRow][targetCol] = getBoardPiece(dragPiece);
-customLastPlaced = { row: targetRow, col: targetCol };
-customSelectedSquare = null;
-renderBoard(game.getState());
-} else if (customSelected) {
-handleCustomSquareClick(targetRow, targetCol);
-}
-} else if (startSq && !wasDragging) {
-const coords = squareToCoords(startSq);
-handleCustomSquareClick(coords.row, coords.col);
-}
-return;
+  // clear any temporary drag highlight
+  if (currentDragTarget) {
+    const prev = boardEl.querySelector(`[data-square="${currentDragTarget}"]`);
+    if (prev) prev.classList.remove('custom-highlight');
+    currentDragTarget = null;
+  }
+
+  if (targetSquare && targetRow >= 0) {
+    if (fromBoard) {
+      const { row: fr, col: fc, piece } = fromBoard;
+      if (fr === targetRow && fc === targetCol) {
+        if (!wasDragging) handleCustomSquareClick(targetRow, targetCol);
+      } else {
+        game.board[targetRow][targetCol] = piece;
+        game.board[fr][fc] = '.';
+        customLastPlaced = { row: targetRow, col: targetCol };
+        customSelectedSquare = null;
+        renderBoard(game.getState());
+      }
+    } else if (fromPalette) {
+      game.board[targetRow][targetCol] = getBoardPiece(dragPiece);
+      customLastPlaced = { row: targetRow, col: targetCol };
+      customSelectedSquare = null;
+      renderBoard(game.getState());
+    } else if (customSelected) {
+      handleCustomSquareClick(targetRow, targetCol);
+    }
+  } else if (fromBoard) {
+    // piece was dragged outside the board → delete it
+    const { row: fr, col: fc } = fromBoard;
+    game.board[fr][fc] = '.';
+    customLastPlaced = null;
+    customSelectedSquare = null;
+    renderBoard(game.getState());
+  } else if (startSq && !wasDragging) {
+    const coords = squareToCoords(startSq);
+    handleCustomSquareClick(coords.row, coords.col);
+  }
+  return;
 }
 
 if (wasDragging && targetSquare && startSq !== targetSquare) {
@@ -2116,7 +2192,7 @@ const output = fen + '\n\nFrom https://hriskyhrisky.github.io/chess-game/ <3';
 navigator.clipboard.writeText(output).then(() => {
 const btn = document.getElementById('fen-copy-btn');
 const original = btn.textContent;
-btn.textContent = '✓ Copied!';
+btn.textContent = '✅ Copied!';
 setTimeout(() => { btn.textContent = original;}, 2000);
 }).catch(err => {
 alert('Failed to copy FEN');
@@ -2129,7 +2205,7 @@ const output = pgn + '\nFrom https://hriskyhrisky.github.io/chess-game/ <3';
 navigator.clipboard.writeText(output).then(() => {
 const btn = document.getElementById('pgn-copy-btn');
 const original = btn.textContent;
-btn.textContent = '✓ Copied!';
+btn.textContent = '✅ Copied!';
 setTimeout(() => { btn.textContent = original;}, 2000);
 }).catch(err => {
 alert('Failed to copy PGN');
@@ -2230,7 +2306,6 @@ function updateTurnToggleButton() {
 if (!turnToggleBtn) return;
 const isWhite = game.turn === 'w';
 turnToggleBtn.textContent = isWhite ? 'White first' : 'Black first';
-turnToggleBtn.classList.toggle('active', isWhite);
 }
 
 function updateCastleButtons() {
@@ -2447,7 +2522,7 @@ pickerEl.remove();
 visible = false;
 });
 });
-})();
+});
 </script>
 </body>
 </html>
