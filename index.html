@@ -542,7 +542,7 @@ text-align: center;
 <button id="flip-btn" title="Flip board">Flip</button>
 <button id="assist-toggle" title="Assist mode">Assist</button>
 <button id="custom-btn" title="Custom board">Custom</button>
-<button id="color-picker-btn" title="Board colours">🎨</button>
+<button id="color-picker-btn" title="Board colors">🎨</button>
 <button id="img-import-btn" title="Board image">🖼️</button>
 <button id="time-toggle-btn" title="Toggle move times">⏱️ Time</button>
 </div>
@@ -2317,7 +2317,7 @@ castleBlackBtn.classList.toggle('active', customCastling.black);
 function generateChess960() {
 // Generate a random back rank satisfying Chess960 constraints
 const backRank = new Array(8).fill(null);
-// Bishops on opposite colours
+// Bishops on opposite colors
 const evenCols = [0,2,4,6];
 const oddCols= [1,3,5,7];
 const b1Col = evenCols[Math.floor(Math.random() * 4)];
@@ -2483,46 +2483,149 @@ fileInput.click();
 });
 })();
 
-(function() {
+setTimeout(() => {
 const btn = document.getElementById('color-picker-btn');
+if (!btn) return;
 let pickerEl = null;
 let visible = false;
+let dragging = false;
+let dragStartX, dragStartY, startLeft, startTop;
+let dragPointerId = null;
+
+function hexFromCSSVar(name, fallback) {
+const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+return raw || fallback;
+}
+
+function updateLight(hex) {
+document.documentElement.style.setProperty('--light-square', hex);
+if (!pickerEl) return;
+const cp = pickerEl.querySelector('#light-picker');
+const txt = pickerEl.querySelector('#light-text');
+if (cp && cp.value !== hex) cp.value = hex;
+if (txt && txt.value !== hex) txt.value = hex;
+}
+
+function updateDark(hex) {
+document.documentElement.style.setProperty('--dark-square', hex);
+if (!pickerEl) return;
+const cp = pickerEl.querySelector('#dark-picker');
+const txt = pickerEl.querySelector('#dark-text');
+if (cp && cp.value !== hex) cp.value = hex;
+if (txt && txt.value !== hex) txt.value = hex;
+}
+
+function closePicker() {
+if (pickerEl) pickerEl.remove();
+pickerEl = null;
+visible = false;
+dragging = false;
+dragPointerId = null;
+}
+
 btn.addEventListener('click', () => {
 if (visible) {
-if (pickerEl) pickerEl.remove();
-visible = false;
+closePicker();
 return;
 }
 visible = true;
+const curLight = hexFromCSSVar('--light-square', '#f0d9b5');
+const curDark = hexFromCSSVar('--dark-square', '#b58863');
+
 pickerEl = document.createElement('div');
 pickerEl.className = 'color-picker-widget';
-pickerEl.style.cssText = 'position:fixed; bottom:80px; left:20px; background:#333; padding:1rem; border-radius:8px; z-index:999;';
+pickerEl.style.cssText = 'position:fixed; left:20px; top:40%; background:#333; padding:0; border-radius:8px; z-index:10000; box-shadow:0 0 15px rgba(0,0,0,0.5);';
 pickerEl.innerHTML = `
-<div style="margin-bottom:8px;color:#fff;">Board colours</div>
-<input type="color" id="light-picker" value="${getComputedStyle(document.documentElement).getPropertyValue('--light-square').trim() || DEFAULT_LIGHT}" style="margin-right:5px;"> Light
-<input type="color" id="dark-picker" value="${getComputedStyle(document.documentElement).getPropertyValue('--dark-square').trim() || DEFAULT_DARK}" style="margin-left:10px;"> Dark
-<button id="default-colors-btn" style="margin-left:10px;">Default</button>
-<button id="close-picker" style="margin-left:10px;">Close</button>
+<div class="color-picker-header" style="background:#1a1a1a; padding:6px 10px; border-radius:8px 8px 0 0; display:flex; justify-content:space-between; align-items:center; cursor:grab; user-select:none; touch-action:none;">
+<span style="color:#fff; font-weight:bold; font-size:0.7rem;">Board Colors</span>
+</div>
+<div style="padding:0.8rem 1rem 0.6rem;">
+<div style="display:flex; align-items:center; gap:5px; margin-bottom:6px;">
+<input type="color" id="light-picker" value="${curLight}" style="width:30px; height:30px; cursor:pointer;">
+<span style="color:#fff; font-size:0.8rem;">Light</span>
+<input type="text" id="light-text" value="${curLight}" style="width:70px; background:#222; color:#fff; border:1px solid #555; padding:2px 4px; font-size:0.8rem;">
+</div>
+<div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+<input type="color" id="dark-picker" value="${curDark}" style="width:30px; height:30px; cursor:pointer;">
+<span style="color:#fff; font-size:0.8rem;">Dark</span>
+<input type="text" id="dark-text" value="${curDark}" style="width:70px; background:#222; color:#fff; border:1px solid #555; padding:2px 4px; font-size:0.8rem;">
+</div>
+<div style="display:flex; gap:5px;">
+<button id="default-colors-btn" style="font-size:0.8rem;">Default</button>
+<button id="close-picker" style="font-size:0.8rem;">Close</button>
+</div>
+</div>
 `;
 document.body.appendChild(pickerEl);
-document.getElementById('light-picker').addEventListener('input', (e) => {
-document.documentElement.style.setProperty('--light-square', e.target.value);
+
+const header = pickerEl.querySelector('.color-picker-header');
+
+function onDragStart(e) {
+if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+e.preventDefault();
+dragging = true;
+dragPointerId = e.pointerId;
+dragStartX = e.clientX;
+dragStartY = e.clientY;
+const rect = pickerEl.getBoundingClientRect();
+startLeft = rect.left;
+startTop = rect.top;
+header.setPointerCapture(e.pointerId);
+}
+
+function onDragMove(e) {
+if (!dragging) return;
+if (e.pointerId !== dragPointerId) return;
+const dx = e.clientX - dragStartX;
+const dy = e.clientY - dragStartY;
+let newLeft = startLeft + dx;
+let newTop = startTop + dy;
+const rect = pickerEl.getBoundingClientRect();
+const maxX = window.innerWidth - rect.width;
+const maxY = window.innerHeight - rect.height;
+newLeft = Math.max(0, Math.min(newLeft, maxX));
+newTop = Math.max(0, Math.min(newTop, maxY));
+pickerEl.style.left = newLeft + 'px';
+pickerEl.style.top = newTop + 'px';
+pickerEl.style.bottom = 'auto';
+}
+
+function onDragEnd(e) {
+if (!dragging) return;
+if (e.pointerId !== dragPointerId) return;
+dragging = false;
+if (dragPointerId !== null) {
+try { header.releasePointerCapture(dragPointerId); } catch (err) {}
+dragPointerId = null;
+}
+}
+
+header.addEventListener('pointerdown', onDragStart);
+header.addEventListener('pointermove', onDragMove);
+header.addEventListener('pointerup', onDragEnd);
+header.addEventListener('pointercancel', onDragEnd);
+
+pickerEl.querySelector('#light-picker').addEventListener('input', (e) => updateLight(e.target.value));
+pickerEl.querySelector('#dark-picker').addEventListener('input', (e) => updateDark(e.target.value));
+
+pickerEl.querySelector('#light-text').addEventListener('input', (e) => {
+let val = e.target.value.trim();
+if (val.charAt(0) !== '#') val = '#' + val;
+if (/^#[0-9a-fA-F]{6}$/.test(val)) updateLight(val);
 });
-document.getElementById('dark-picker').addEventListener('input', (e) => {
-document.documentElement.style.setProperty('--dark-square', e.target.value);
+pickerEl.querySelector('#dark-text').addEventListener('input', (e) => {
+let val = e.target.value.trim();
+if (val.charAt(0) !== '#') val = '#' + val;
+if (/^#[0-9a-fA-F]{6}$/.test(val)) updateDark(val);
 });
-document.getElementById('default-colors-btn').addEventListener('click', () => {
-document.documentElement.style.setProperty('--light-square', DEFAULT_LIGHT);
-document.documentElement.style.setProperty('--dark-square', DEFAULT_DARK);
-document.getElementById('light-picker').value = DEFAULT_LIGHT;
-document.getElementById('dark-picker').value = DEFAULT_DARK;
+
+pickerEl.querySelector('#default-colors-btn').addEventListener('click', () => {
+updateLight('#f0d9b5');
+updateDark('#b58863');
 });
-document.getElementById('close-picker').addEventListener('click', () => {
-pickerEl.remove();
-visible = false;
+pickerEl.querySelector('#close-picker').addEventListener('click', closePicker);
 });
-});
-});
+}, 0);
 </script>
 </body>
 </html>
